@@ -1,0 +1,23 @@
+{
+  "name": "snow-tooth",
+  "version": "1.0.0",
+  "description": "Snow Tooth playground example",
+  "keywords": [
+    "graphql"
+  ],
+  "homepage": "https://github.com/LucianoBuhler/lb-snow-tooth-graphql#readme",
+  "bugs": {
+    "url": "https://github.com/LucianoBuhler/lb-snow-tooth-graphql/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucianoBuhler/lb-snow-tooth-graphql.git"
+  },
+  "license": "MIT",
+  "author": "Luciano Buhler",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
