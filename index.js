@@ -12,7 +12,9 @@ const typeDefs = gql`
     capacity: Int!
     night: Boolean!
     elevationGain: Int
+    trailAccess: [Trail!]!
   }
+
   enum LiftStatus {
     OPEN
     CLOSED
@@ -24,21 +26,25 @@ const typeDefs = gql`
     name: String!
     difficulty: TrailDifficulty!
     status: TrailStatus!
-    grromed: Boolean!
+    groomed: Boolean!
     snowmaking: Boolean!
     trees: Boolean!
     night: Boolean!
+    accessedByLifts: [Lift!]!
   }
-  enum TrailStatus {
-    OPEN
-    CLOSED
-  }
+
   enum TrailDifficulty {
     beginner
     intermediate
     advanced
     expert
   }
+
+  enum TrailStatus {
+    OPEN
+    CLOSED
+  }
+
   type Query {
     liftCount: Int!
     allLifts: [Lift!]!
@@ -57,8 +63,20 @@ const resolvers = {
       lifts.find((lift) => lift.id === args.id),
     trailCount: () => trails.length,
     allTrails: () => trails,
-    findTrailById: (parent, args) => 
-      trails.find((trail) => trail.id === args.id)
+    findTrailById: (parent, {id}) => 
+      trails.find((trail) => trail.id === id)
+  },
+  Lift: {
+    trailAccess: (parent) =>
+      parent.trails.map((trailId) =>
+        trails.find((trail) => trail.id === trailId)
+      )
+  },
+  Trail: {
+    accessedByLifts: (parent) =>
+      parent.lift.map((liftId) =>
+        lifts.find((lift) => lift.id === liftId)
+      )
   }
 };
 
