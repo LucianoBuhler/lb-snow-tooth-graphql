@@ -21,13 +21,15 @@ const typeDefs = gql`
   type Query {
     liftCount: Int!
     allLifts: [Lift!]!
+    findLiftById(id: ID!): Lift!
   }
 `;
 
 const resolvers = {
   Query: {
     liftCount: () => lifts.length,
-    allLifts: () => lifts
+    allLifts: () => lifts,
+    findLiftById: (parent, args) => lifts.find((lift) => lift.id === args.id)
   }
 };
 
