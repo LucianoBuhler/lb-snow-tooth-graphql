@@ -1,10 +1,13 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { gql } from "graphql-tag";
+import { GraphQLScalarType } from "graphql";
 import lifts from "./data/lifts.json" with { type: "json" };
 import trails from "./data/trails.json" with { type: "json" };
 
 const typeDefs = gql`
+  scalar Date
+
   type Lift {
     id: ID!
     name: String!
@@ -55,8 +58,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    setLiftStatus(id: ID!, status: LiftStatus!): Lift!
+    setLiftStatus(id: ID!, status: LiftStatus!): SetLiftStatusPayload!
     setTrailStatus(id: ID!, status: TrailStatus!): Trail!
+  }
+
+  type SetLiftStatusPayload {
+    lift: Lift
+    changed: Date
   }
 `;
 
@@ -75,7 +83,10 @@ const resolvers = {
     setLiftStatus: (parent, { id, status }) => {
       const updatedLift = lifts.find((lift) => lift.id === id);
       updatedLift.status = status;
-      return updatedLift;
+      return {
+        lift: updatedLift,
+        changed: new Date()
+      };
     },
     setTrailStatus: (parent, { id, status }) => {
       const updatedTrail = trails.find((trail) => trail.id === id);
@@ -94,7 +105,14 @@ const resolvers = {
       parent.lift.map((liftId) =>
         lifts.find((lift) => lift.id === liftId)
       )
-  }
+  }, 
+  Date: new GraphQLScalarType({
+    name: "Date",
+    description: "A valid dattime value",
+    parseValue: (value) => new Date(value),
+    parseLiteral: (ast) => new Date (ast.value),
+    serialize: (value) => new Date(value).toISOString()
+  })
 };
 
 async function startApolloServer() {
