@@ -7,14 +7,23 @@ import trails from "./data/trails.json" with { type: "json" };
 
 const typeDefs = gql`
   scalar Date
-
+  """
+  The Lift type is the core object withing our Snowtooth API.
+  """
   type Lift {
+    "A unique identifier from our lift."
     id: ID!
+    "The name of the lift."
     name: String!
+    "The current operational status of the lift: OPEN, CLOSED, or HOLD."
     status: LiftStatus!
+    "The number of people the lift can carry at one time."
     capacity: Int!
+    "Does the lift operate at night?"
     night: Boolean!
+    "How many feet in elevation this lift climbs."
     elevationGain: Int
+    "A list of trails that can be accessed from this lift."
     trailAccess: [Trail!]!
   }
 
