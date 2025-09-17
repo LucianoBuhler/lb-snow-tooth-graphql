@@ -8,9 +8,15 @@ const typeDefs = gql`
   type Lift {
     id: ID!
     name: String!
+    status: LiftStatus!
     capacity: Int!
     night: Boolean!
-    status: String!
+    elevationGain: Int
+  }
+  enum LiftStatus {
+    OPEN
+    CLOSED
+    HOLD
   }
   type Query {
     liftCount: Int!
