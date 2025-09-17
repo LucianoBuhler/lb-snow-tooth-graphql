@@ -5,14 +5,23 @@ import lifts from "./data/lifts.json" with { type: "json" };
 // import trails from "./data/trails.json" with { type: "json" };
 
 const typeDefs = gql`
+  type Lift {
+    id: ID!
+    name: String!
+    capacity: Int!
+    night: Boolean!
+    status: String!
+  }
   type Query {
     liftCount: Int!
+    allLifts: [Lift!]!
   }
 `;
 
 const resolvers = {
   Query: {
-    liftCount: () => lifts.length
+    liftCount: () => lifts.length,
+    allLifts: () => lifts
   }
 };
 
