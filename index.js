@@ -53,6 +53,11 @@ const typeDefs = gql`
     allTrails: [Trail!]!
     findTrailById(id: ID!): Trail!
   }
+
+  type Mutation {
+    setLiftStatus(id: ID!, status: LiftStatus!): Lift!
+    setTrailStatus(id: ID!, status: TrailStatus!): Trail!
+  }
 `;
 
 const resolvers = {
@@ -65,6 +70,18 @@ const resolvers = {
     allTrails: () => trails,
     findTrailById: (parent, {id}) => 
       trails.find((trail) => trail.id === id)
+  },
+  Mutation: {
+    setLiftStatus: (parent, { id, status }) => {
+      const updatedLift = lifts.find((lift) => lift.id === id);
+      updatedLift.status = status;
+      return updatedLift;
+    },
+    setTrailStatus: (parent, { id, status }) => {
+      const updatedTrail = trails.find((trail) => trail.id === id);
+      updatedTrail.status = status;
+      return updatedTrail;
+    }
   },
   Lift: {
     trailAccess: (parent) =>
